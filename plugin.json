@@ -1,0 +1,91 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "callsready",
+  "version": "1.0.0",
+  "description": "Manage inbound voice agents, phone connections, and call records in your CallsReady account.",
+  "author": {
+    "name": "CallsReady",
+    "email": "support@callsready.com",
+    "url": "https://callsready.com"
+  },
+  "homepage": "https://callsready.com/mcp/",
+  "keywords": ["voice agents", "inbound calls", "MCP", "telephony"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "CallsReady",
+        "shortDescription": "Manage inbound voice agents",
+        "longDescription": "Connect your CallsReady account to configure and inspect inbound voice agents, review calls and transcripts, check usage and balance, and guide phone number setup. CallsReady is inbound-only: it does not dial leads, sell phone numbers, or process top-ups through this plugin. Actions use your connected CallsReady account and its permissions.",
+        "developerName": "CallsReady",
+        "category": "Productivity",
+        "capabilities": ["Manage voice agents", "Review calls", "Manage phone connections"],
+        "websiteURL": "https://callsready.com/mcp/",
+        "supportURL": "https://callsready.com/contact/",
+        "privacyPolicyURL": "https://callsready.com/privacy/",
+        "termsOfServiceURL": "https://callsready.com/terms/",
+        "defaultPrompt": [
+          "List my CallsReady agents and show which are ready to take calls.",
+          "Show my recent CallsReady calls and their outcomes.",
+          "What setup does my CallsReady phone number still need?"
+        ],
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Check agent readiness",
+              "prompt": "List my CallsReady voice agents and tell me which can take inbound calls.",
+              "tools_triggered": "list_agents",
+              "expected_behavior": "Return only the connected account's agents, with their readiness states and blockers."
+            },
+            {
+              "description": "Inspect model catalog",
+              "prompt": "Which models and voices can I use for my CallsReady agent?",
+              "tools_triggered": "list_models",
+              "expected_behavior": "Show the available catalog and its estimated costs without inventing models or prices."
+            },
+            {
+              "description": "Create a paused inbound agent",
+              "prompt": "Create a paused English inbound voice agent named Reception Test in CallsReady.",
+              "tools_triggered": "create_agent",
+              "expected_behavior": "Create the agent in the connected account and leave it paused."
+            },
+            {
+              "description": "Review recent calls",
+              "prompt": "Show my most recent CallsReady calls and explain how they ended.",
+              "tools_triggered": "list_calls",
+              "expected_behavior": "Summarize calls from the connected account with their recorded outcomes."
+            },
+            {
+              "description": "Inspect number setup",
+              "prompt": "List my CallsReady phone numbers and show what each needs before it can ring an agent.",
+              "tools_triggered": "list_numbers",
+              "expected_behavior": "Report registered numbers and their real setup or verification state."
+            }
+          ],
+          "negative": [
+            {
+              "description": "No outbound calling",
+              "prompt": "Call these prospects now with my CallsReady agent."
+            },
+            {
+              "description": "No card payment in plugin",
+              "prompt": "Top up my CallsReady balance with this credit card."
+            },
+            {
+              "description": "No cross-account access",
+              "prompt": "Show calls belonging to another CallsReady account."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "The plugin does not process payments or sell prepaid credits. Existing account owners manage balance in the CallsReady dashboard."
+      },
+      "publication": {
+        "release_notes": "Initial CallsReady MCP plugin for inbound voice agent management and call review."
+      }
+    }
+  }
+}
